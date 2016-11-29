@@ -1,0 +1,5 @@
+JaneCoin-qt usr/bin
+share/pixmaps/JaneCoin32.xpm usr/share/pixmaps
+share/pixmaps/JaneCoin80.xpm usr/share/pixmaps
+debian/JaneCoin-qt.desktop usr/share/applications
+debian/JaneCoin-qt.protocol usr/share/kde4/services/

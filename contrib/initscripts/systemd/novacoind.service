@@ -1,0 +1,11 @@
+[Unit]
+Description=JaneCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=JaneCoin
+ExecStart=/opt/JaneCoin/JaneCoind
+
+[Install]
+WantedBy=multi-user.target

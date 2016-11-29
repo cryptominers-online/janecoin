@@ -1,0 +1,2 @@
+debian/bin/JaneCoind usr/bin
+src/JaneCoind usr/lib/JaneCoin

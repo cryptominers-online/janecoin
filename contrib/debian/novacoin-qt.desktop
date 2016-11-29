@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=JaneCoin
+Comment=JaneCoin P2P Cryptocurrency
+Comment[ru]=JaneCoin, P2P криптовалюта
+Comment[fr]=JaneCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=JaneCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/JaneCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/JaneCoin80.xpm
+MimeType=x-scheme-handler/JaneCoin;
+Categories=Office;

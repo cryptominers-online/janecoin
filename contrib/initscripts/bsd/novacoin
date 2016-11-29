@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: JaneCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# JaneCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable JaneCoin service.
+# JaneCoin_config (path): Set to /usr/local/etc/JaneCoin.conf by default.
+# JaneCoin_user:  The user account JaneCoin daemon runs as. It uses 'root' user by default.
+# JaneCoin_group: The group account JaneCoin daemon runs as. It uses 'wheel' group by default.
+# JaneCoin_datadir (str): Default to "/var/db/JaneCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=JaneCoin
+rcvar=JaneCoin_enable
+
+: ${JaneCoin_enable:=NO}
+: ${JaneCoin_config=/usr/local/etc/JaneCoin.conf}
+: ${JaneCoin_datadir=/var/db/JaneCoin}
+: ${JaneCoin_user="root"}
+: ${JaneCoin_group="wheel"}
+
+required_files=${JaneCoin_config}
+command=/usr/local/bin/JaneCoind
+JaneCoin_chdir=${JaneCoin_datadir}
+pidfile="${JaneCoin_datadir}/JaneCoind.pid"
+stop_cmd=JaneCoin_stop
+command_args="-conf=${JaneCoin_config} -datadir=${JaneCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+JaneCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${JaneCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${JaneCoin_user}:${JaneCoin_group} ${JaneCoin_datadir}
+}
+
+JaneCoin_prestart()
+{
+	if [ ! -d "${JaneCoin_datadir}/." ]; then
+		JaneCoin_create_datadir || return 1
+	fi
+}
+
+JaneCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+JaneCoin_stop()
+{
+    JaneCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${JaneCoin_config} -datadir=${JaneCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"
